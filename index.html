@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pabs Loves You</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      color: #ff9900;
+      background: url('https://media.discordapp.net/attachments/1284270131777900554/1311175359131025488/kxa-enhanced.png?ex=674fcfb6&is=674e7e36&hm=f43ffbc3a068b02b7b154160a0992772f5dd63a227ddd88bf347c4d94b2ba137&=&format=webp&quality=lossless&width=550&height=294') center/cover no-repeat;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .sinoname {
+      z-index: 2;
+      text-align: center;
+      animation: flicker 2s infinite;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #ffffff;
+      text-shadow: 0 0 5px #ff9900, 0 0 10px #ff9900, 0 0 20px #ff9900, 0 0 40px rgb(255, 0, 0), 0 0 80px rgb(255, 0, 0);
+      margin: 0;
+    }
+    .social-icons {
+      margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    .social-icons a {
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .social-icons a:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+    .social-icons img {
+      width: 48px;
+      height: 48px;
+    }
+    @keyframes flicker {
+        0% { opacity: 1; }
+        50% { opacity: 0.2; }
+        100% { opacity: 1; }
+    }
+    button {
+      position: absolute;
+      z-index: 10;
+      width: 80%;
+      max-width: 500px;
+      height: 250px;
+      background-color: #ff9900;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 10px;
+    }
+    button:hover {
+      background-color: rgb(255, 0, 0);
+      color: #fff;
+    }
+    pre {
+      font-size: 1rem;
+      margin: 0;
+      color: #ffffff;
+      text-shadow: 0 0 5px #ff9900, 0 0 10px #ffc400, 0 0 20px #ff9900, 0 0 40px rgb(255, 0, 0);
+    }
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 3rem;
+      }
+      button {
+        font-size: 1.2rem;
+      }
+      pre {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button id="startButton">Bossk Was Hiding</button>
+  <canvas id="matrix"></canvas>
+  <div class="sinoname">
+    <h1>BOSSK ONTOP FCKERS</h1>
+    <audio id="background-audio" src="https://raw.githubusercontent.com/boleanz/boleanz/main/bosskz.mp3" loop></audio>
+    <pre id="iplookz" class="iplookz">Fetching...</pre>
+    <div class="social-icons">
+      <a href="https://discord.gg/sinagphroleplay " target="_blank" title="Sinag RP">
+        <img src="https://img.icons8.com/fluency/48/000000/discord-new-logo.png" alt="Discord">
+      </a>
+      <a href="https://www.tiktok.com/@kenji.1921" target="_blank" title="My TikTok">
+        <img src="https://img.icons8.com/fluency/48/000000/tiktok.png" alt="TikTok">
+      </a>
+    </div>
+  </div>
+  <script>
+    const startButton = document.getElementById("startButton");
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+    const audio = document.getElementById("background-audio");
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = `${fontSize}px monospace`;
+
+      drops.forEach((y, i) => {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        const x = i * fontSize;
+        ctx.fillText(text, x, y * fontSize);
+
+        if (y * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      });
+      requestAnimationFrame(drawMatrix);
+    }
+    startButton.addEventListener("click", () => {
+      startButton.style.display = "none";
+      drawMatrix();
+      audio.play().catch(err => console.error("Audio doesn't load:", err));
+    });
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    });
+    function fetchIPAndInfo() {
+      fetch("https://api.ipify.org/?format=json")
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("iplookz").textContent = `MY HEART: ${data.ip}`;
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    }
+
+    fetchIPAndInfo();
+  </script>
+</body>
+</html>
